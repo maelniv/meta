@@ -3,7 +3,7 @@ import numpy as np
 import random
 import copy 
 
-DATA = pd.read_csv("gr17.2085.tsp",header=None,sep=" ")
+DATA = pd.read_csv("TSPDataset/gr17.2085.tsp",header=None,delim_whitespace=True)
 SIZE_TOURNAMENT = 50
 NUMBER_TOURNAMENT_FOR_ONE_GENERATION = 50
 SIZE_POPULATION = 100
