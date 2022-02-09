@@ -17,10 +17,10 @@ Création d'un objet Solution pour stocker :
 - Si la solution est à priorisé pour l'élitisme
 """
 class Solution:
-    def __init__(self, city_list, distance, priority):
+    def __init__(self, city_list, distance):
         self.__city_list = city_list
         self.__distance = distance
-        self.__priority = priority
+        self.__priority = 0
 
     def get_priority(self):
         return self.__priority
@@ -64,12 +64,15 @@ class Generation:
 #Ensuite on remplace dans la population de base les 50 nouveaux frérot en gardant les 3 meilleurs de l'ancienne génération (élitisme)
 
 
-#On crée notre population de 100 individus
+"""
+Instanciation des différentes solutions avec leur liste de ville et leur distance totale
+Nombre de solution différentes = SIZE_POPULATION
+"""
 def new_random_solution():
-    city_list = np.arange(1,NUMBER_CITIES)
+    city_list = np.arange(1, NUMBER_CITIES)
     np.random.shuffle(city_list)
     city_list = city_list.tolist()
-    solution = Solution(city_list, find_distance_for_one_solution(city_list), 0)
+    solution = Solution(city_list, find_distance_for_one_solution(city_list))
     return solution
     
 def build_random_population():
@@ -78,6 +81,9 @@ def build_random_population():
         population.append(new_random_solution())
     return population
 
+"""
+Génére la distance du parcours pour une solution
+"""
 def find_distance_for_one_solution(city_list):
     distance = 0
     for city in city_list:
@@ -85,7 +91,10 @@ def find_distance_for_one_solution(city_list):
         distance += DATA[city][city_list[index_next_city]]
     return distance
 
-#On lance notre tournoirs avec 50 individus
+"""
+Création du tournoi
+Taille du tournoi = SIZE_TOURNAMENT
+"""
 def initialize_tournament(population):
     tournament_schedule = []
     while len(tournament_schedule) != SIZE_TOURNAMENT:
@@ -95,6 +104,9 @@ def initialize_tournament(population):
         population.pop(chosen_solution)
     return tournament_schedule
 
+"""
+On récupère 3 finalistes et on return le finaliste avec la plus petite fonction de distance
+"""
 def find_tournament_winner(tournament_schedule):
     picked_solution=[]
     while len(picked_solution) != NUMBER_FINALIST:
@@ -102,9 +114,12 @@ def find_tournament_winner(tournament_schedule):
         choice = random.randint(0, size-1)
         picked_solution.append(tournament_schedule[choice])
         tournament_schedule.pop(choice)
-    picked_solution.sort(key=lambda x: x.get_distance(), reverse=True)
+    picked_solution.sort(key=lambda x: x.get_distance(), reverse = True)
     return picked_solution[0]
 
+"""
+MAIN
+"""
 def start_genetique():
     population = build_random_population()
     list_generation = []
