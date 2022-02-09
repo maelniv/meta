@@ -46,6 +46,7 @@ class Generation:
     def __init__(self, solution_list, generation_number):
         self.__solution_list = solution_list
         self.__generation_number = generation_number
+        self.__best_solution = None
     
     def get_solution_list(self):
         return self.__solution_list
