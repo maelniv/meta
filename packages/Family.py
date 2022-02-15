@@ -39,7 +39,7 @@ class Family:
     def mutation(self, children):
         number1 = random.randint(0,100)
         mutation = 0
-        if number1 < 5:
+        if number1 < const.MUTATION:
             number2 = random.randint(0, const.NUMBER_CITIES - 1)
             number3 = random.randint(0, const.NUMBER_CITIES - 1)
             children[number2], children[number3] = children[number3], children[number2]
@@ -60,7 +60,7 @@ class Family:
         return children_city_list
         
     def reproduction(self):
-        indice = 10
+        indice = const.INDICE_CROSSOVER
         
         city_list_children1_crossover = self.crossover(self.get_parent1().get_city_list()[:indice], self.get_parent2().get_city_list(), indice)
         children1_mutation = self.mutation(city_list_children1_crossover)
@@ -74,7 +74,10 @@ class Family:
         
         return children1_mutation["mutation"] + children2_mutation["mutation"]
     
-    def find_best_children_and_worst_parent(self):
+    def find_best_children(self):
         best_children = self.get_children1() if self.get_children1().get_distance() < self.get_children2().get_distance() else self.get_children2()
+        return best_children
+    
+    def find_worst_parent(self):
         worst_parent = self.get_parent1() if self.get_parent1().get_distance() > self.get_parent2().get_distance() else self.get_parent2()
-        return {"best_children": best_children , "worst_parent": worst_parent}
+        return worst_parent

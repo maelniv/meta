@@ -5,6 +5,8 @@ d'une génération.
 import random
 from typing import List
 
+import numpy as np
+
 from packages.Family import Family
 import packages.constants as const
 
@@ -19,6 +21,9 @@ class Generation:
         self.__number_mutation = 0
         
         self.__best_solution = None
+    
+    def get_best_solution(self):
+        return self.__best_solution
     
     def get_solution_list(self):
         return self.__solution_list
@@ -38,6 +43,10 @@ class Generation:
     def get_number_mutation(self):
         return self.__number_mutation
     
+    def set_best_solution(self):
+        self.get_solution_list().sort(key=lambda x: x.get_distance(), reverse=False)
+        self.__best_solution = self.get_solution_list()[0].get_distance()
+               
     def presentation_generation(self):
         for i in self.get_solution_list():
             print(i.presentation_solution())
@@ -49,17 +58,6 @@ class Generation:
     def presentation_family(self):
         for i in self.get_family_list():
             i.presentation_family()
-    
-    def set_priority_three_best_solution(self):
-        self.reset_priority()
-        self.get_solution_list().sort(key=lambda x: x.get_distance(), reverse=True)
-        self.get_solution_list()[0].set_priority(1)
-        self.get_solution_list()[1].set_priority(1)
-        self.get_solution_list()[2].set_priority(1)
-
-    def reset_priority(self):
-        for i in self.get_solution_list():
-            i.set_priority(0)
             
     def set_tournament_schedule(self):
         if len(self.get_solution_list()) != const.SIZE_POPULATION:
@@ -108,26 +106,44 @@ class Generation:
         
         for i in self.get_family_list():
             self.__number_mutation += i.reproduction()
-            
-    def steady_state(self):
-        for i in self.get_solution_list():
-            tournois = self.get_tournament_schedule()
-            tournois.index(i)
-        
-        
-        
-        
-        
-        
-        self.set_priority_three_best_solution()
-        for i in self.get_family_list():
-            worst_parent = i.find_best_children_and_worst_parent()["worst_parent"]
-            best_children = i.find_best_children_and_worst_parent()["best_children"]
-            print(worst_parent)
-            print(worst_parent.get_city_list())
-            index_worst_parent = self.get_solution_list().index(worst_parent)
-            self.get_solution_list()[index_worst_parent] = best_children
     
+    def replacement(self):
+        if const.REPLACEMENT_STRATEGIE == "Steady_State":
+            self.steady_state_replacement()
+        elif const.REPLACEMENT_STRATEGIE == "Generational":
+            self.generationnal_replacement()
+        elif const.REPLACEMENT_STRATEGIE == "Mixte":
+            if self.get_generation_number() % 2 == 0:
+                self.steady_state_replacement()
+            else:
+                self.generationnal_replacement()
+           
+    def steady_state_replacement(self):
+        for i in self.get_family_list():
+            worst_parent = i.find_worst_parent()
+            best_children = i.find_best_children()
+            if worst_parent in self.get_solution_list():
+                index_worst_parent = self.get_solution_list().index(worst_parent)
+                self.get_solution_list()[index_worst_parent] = best_children
+            else:
+                self.get_solution_list().sort(key=lambda x: x.get_distance(), reverse=False)
+                num = random.randint(const.ELITISM, const.SIZE_POPULATION - 1)
+                self.get_solution_list()[num] = best_children
+                   
+    def generationnal_replacement(self):
+        list_children = []
+        self.get_solution_list().sort(key=lambda x: x.get_distance(), reverse=False)
+        list_number = np.arange(const.ELITISM, const.SIZE_POPULATION)
+        np.random.shuffle(list_number)
+        list_number = list_number.tolist()
+        for i in self.get_family_list():
+            children1 = i.get_children1()
+            children2 = i.get_children2()
+            list_children.append(children1)
+            list_children.append(children2)
+        for i in range(const.NUMBER_TOURNAMENT_FOR_ONE_GENERATION):
+            self.get_solution_list()[list_number[i]] = list_children[i]
+
     def mean_distance(self):
         mean = 0
         for i in self.get_solution_list():

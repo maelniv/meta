@@ -45,19 +45,13 @@ def start_genetique():
         generation.start_tournament()
         generation.createFamily()
         generation.start_reproduction()
-        print(generation.mean_distance())
-        generation.steady_state()
-        print(generation.mean_distance())
-
-        # generation.set_priority_three_best_solution()
-        # print(generation.get_number_mutation())
-        # generation.presentation_winner()     
-        # family_list = createFamily(list_of_winner)
-        # family_list[0].reproduction()
-        # family_list[0].presentation()
-        # print(len(generation.get_solution_list()))
-        actual_generation += 1
-        population = "do something"
+        generation.replacement()
+        generation.set_best_solution()
         
+        print("best : {} mean : {}".format(generation.get_best_solution(), generation.mean_distance()))
+        actual_generation += 1
+        population = generation.get_solution_list()
+    
+    generation.presentation_generation()
 if __name__ == '__main__':
     start_genetique()
