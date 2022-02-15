@@ -29,13 +29,6 @@ def build_random_population():
     while len(population) != const.SIZE_POPULATION:
         population.append(new_random_solution())
     return population
-
-def createFamily(list_of_parent):
-    family_list = []
-    for i in range(int(len(list_of_parent)/2)):
-        family = Family(list_of_parent[2*i], list_of_parent[2*i+1])
-        family_list.append(family)
-    return family_list
     
 """
 MAIN
