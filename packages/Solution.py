@@ -34,7 +34,8 @@ class Solution:
     
     def distance_calculation(self):
         distance = 0
-        for city in self.get_city_list():
-            index_next_city = self.get_city_list().index(city) + 1 if self.get_city_list().index(city) < (const.NUMBER_CITIES - 2) else 0
+        for city in self.get_city_list()[:-1]:
+            index_next_city = self.get_city_list().index(city) + 1
             distance += const.DATA[city][self.get_city_list()[index_next_city]]
+        distance += const.DATA[self.get_city_list()[-1]][self.get_city_list()[0]]
         self.__distance = distance
