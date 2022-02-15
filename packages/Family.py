@@ -4,7 +4,7 @@ import packages.constants as const
 from packages.Solution import Solution
 
 class Family:
-    def __init__(self, parent1, parent2):
+    def __init__(self, parent1: Solution, parent2: Solution):
         self.__parent1 = parent1
         self.__parent2 = parent2
         self.__children1 = Solution([])
@@ -73,3 +73,8 @@ class Family:
         self.set_children2(city_list_children2_mutation)
         
         return children1_mutation["mutation"] + children2_mutation["mutation"]
+    
+    def find_best_children_and_worst_parent(self):
+        best_children = self.get_children1() if self.get_children1().get_distance() < self.get_children2().get_distance() else self.get_children2()
+        worst_parent = self.get_parent1() if self.get_parent1().get_distance() > self.get_parent2().get_distance() else self.get_parent2()
+        return {"best_children": best_children , "worst_parent": worst_parent}

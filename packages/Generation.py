@@ -3,6 +3,8 @@ Création d'un objet Génération permettant de stocker tous les individus
 d'une génération.
 """
 import random
+from typing import List
+
 from packages.Family import Family
 import packages.constants as const
 
@@ -107,3 +109,27 @@ class Generation:
         for i in self.get_family_list():
             self.__number_mutation += i.reproduction()
             
+    def steady_state(self):
+        for i in self.get_solution_list():
+            tournois = self.get_tournament_schedule()
+            tournois.index(i)
+        
+        
+        
+        
+        
+        
+        self.set_priority_three_best_solution()
+        for i in self.get_family_list():
+            worst_parent = i.find_best_children_and_worst_parent()["worst_parent"]
+            best_children = i.find_best_children_and_worst_parent()["best_children"]
+            print(worst_parent)
+            print(worst_parent.get_city_list())
+            index_worst_parent = self.get_solution_list().index(worst_parent)
+            self.get_solution_list()[index_worst_parent] = best_children
+    
+    def mean_distance(self):
+        mean = 0
+        for i in self.get_solution_list():
+            mean += i.get_distance()
+        return mean / const.SIZE_POPULATION

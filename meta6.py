@@ -1,3 +1,4 @@
+from operator import ge
 import numpy as np
 import random
 import copy
@@ -39,11 +40,15 @@ def start_genetique():
     actual_generation = 1
     
     while actual_generation < const.NUMBER_MAX_GENERATION:
-        generation = Generation(population, actual_generation)
+        generation = Generation(copy.deepcopy(population), actual_generation)
         list_generation.append(generation)
         generation.start_tournament()
         generation.createFamily()
         generation.start_reproduction()
+        print(generation.mean_distance())
+        generation.steady_state()
+        print(generation.mean_distance())
+
         # generation.set_priority_three_best_solution()
         # print(generation.get_number_mutation())
         # generation.presentation_winner()     
@@ -52,6 +57,7 @@ def start_genetique():
         # family_list[0].presentation()
         # print(len(generation.get_solution_list()))
         actual_generation += 1
+        population = "do something"
         
 if __name__ == '__main__':
     start_genetique()
