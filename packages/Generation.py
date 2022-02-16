@@ -79,16 +79,14 @@ class Generation:
             self.start_tournament()
         elif const.SELECTION == "Roulette_Wheel":
             self.roulette_wheel()
-            print("temp")
         elif const.SELECTION == "Rank_Based":
-            print("temp")
+            self.rank_based()
         else:
             raise Exception("Aucune méthode de selection n'est définie")
     
     '''
     Tournament
     '''
-    
     def start_tournament(self):
         if len(self.get_list_of_winner()) == const.NUMBER_SOLUTION_REPLACE:
             raise Exception("Les {} gagnant ont déjà été trouvés".format(const.NUMBER_SOLUTION_REPLACE))
@@ -116,8 +114,10 @@ class Generation:
         
         if const.PROBLEM == "TSP":   
             picked_solution.sort(key=lambda x: x.get_distance(), reverse=False)
-        if const.PROBLEM == "MAX_ONE":
+        elif const.PROBLEM == "MAX_ONE":
             picked_solution.sort(key=lambda x: x.get_distance(), reverse=True)
+        else:
+            raise Exception("Aucun problème n'a été défini")
             
         self.__list_of_winner.append(picked_solution[0])
         self.del_selection_list()
@@ -125,13 +125,51 @@ class Generation:
     """
     Roulette
     """
-            
     def roulette_wheel(self):
-        random.choices(population=[1,2,3,4,5,6,7],weights=[1,1,1,1.5,1.5,3,3])
-        print("temp")
+        if len(self.get_list_of_winner()) == const.NUMBER_SOLUTION_REPLACE:
+            raise Exception("Les {} gagnant ont déjà été trouvés".format(const.NUMBER_SOLUTION_REPLACE))
+        
+        while len(self.get_list_of_winner()) != const.NUMBER_SOLUTION_REPLACE:
+            self.find_roulette_wheel_winner()
+
             
+    def find_roulette_wheel_winner(self):
+        list_weight = self.weight_calculation()
+        picked_solution = random.choices(self.get_solution_list(), list_weight)
+        self.__list_of_winner.append(picked_solution[0])
+           
+    def weight_calculation(self):
+        sum_weight = 0
+        list_weight = []
+        for i in self.get_solution_list():
+            sum_weight += (1/i.get_distance())
+        for i in self.get_solution_list():
+            list_weight.append(i.get_weight(sum_weight))
+        return list_weight
             
+    """
+    Rank_based
+    """    
+    def rank_based(self):
+        if len(self.get_list_of_winner()) == const.NUMBER_SOLUTION_REPLACE:
+            raise Exception("Les {} gagnant ont déjà été trouvés".format(const.NUMBER_SOLUTION_REPLACE))
+        
+        while len(self.get_list_of_winner()) != const.NUMBER_SOLUTION_REPLACE:
+            self.find_rank_based_winner()
             
+    
+    def find_rank_based_winner(self):
+        list_weight = []
+        self.get_solution_list().sort(key=lambda x: x.get_distance(), reverse=False)
+        for i in self.get_solution_list():
+            list_weight.append(self.proba_rank(self.get_solution_list().index(i)))
+            
+        picked_solution = random.choices(self.get_solution_list(), list_weight)
+        self.__list_of_winner.append(picked_solution[0])
+
+    def proba_rank(self, rank):
+        return ((2-const.SELECTION_PRESSURE)/const.SIZE_POPULATION) + ((2*rank*(const.SELECTION_PRESSURE-1))/(const.SIZE_POPULATION*(const.SIZE_POPULATION-1)))
+
     """"
     Reproduction
     """   

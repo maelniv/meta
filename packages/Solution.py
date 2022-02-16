@@ -10,7 +10,7 @@ import packages.constants as const
 class Solution:
     def __init__(self, individu_list):
         self.__individu_list = individu_list
-        self.__distance = 0
+        self.__distance = None
 
     def presentation_solution(self):
         return "Individu List = {} | Distance = {}".format(self.get_individu_list(), self.get_distance())
@@ -44,3 +44,6 @@ class Solution:
             
         else:
             raise Exception("Aucun problème n'a été défini")
+        
+    def get_weight(self, sum_weight):
+        return (1/self.get_distance())/sum_weight

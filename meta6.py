@@ -53,9 +53,10 @@ def start_genetique():
     while actual_generation < const.NUMBER_MAX_GENERATION:
         generation = Generation(copy.deepcopy(population), actual_generation)
         list_generation.append(generation)
-        generation.start_tournament()
+        
+        generation.selection()
         generation.createFamily()
-        generation.start_reproduction()
+        generation.start_reproduction()        
         generation.replacement()
         generation.set_best_solution()
         
