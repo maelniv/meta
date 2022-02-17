@@ -61,6 +61,8 @@ class Generation:
             self.__best_solution = self.get_solution_list()[0]
         else:
             raise Exception("Aucun problème n'a été défini")
+        
+        random.shuffle(self.get_solution_list())
               
     def presentation_generation(self):
         for i in self.get_solution_list():
@@ -90,7 +92,7 @@ class Generation:
     def start_tournament(self):
         if len(self.get_list_of_winner()) == const.NUMBER_SOLUTION_REPLACE:
             raise Exception("Les {} gagnant ont déjà été trouvés".format(const.NUMBER_SOLUTION_REPLACE))
-        
+
         while len(self.get_list_of_winner()) != const.NUMBER_SOLUTION_REPLACE:
             self.set_tournament_schedule()
             self.find_tournament_winner()
@@ -121,6 +123,8 @@ class Generation:
             
         self.__list_of_winner.append(picked_solution[0])
         self.del_selection_list()
+        
+        random.shuffle(self.get_solution_list())
     
     """
     Roulette
@@ -166,6 +170,8 @@ class Generation:
             
         picked_solution = random.choices(self.get_solution_list(), list_weight)
         self.__list_of_winner.append(picked_solution[0])
+        
+        random.shuffle(self.get_solution_list())
 
     def proba_rank(self, rank):
         return ((2-const.SELECTION_PRESSURE)/const.SIZE_POPULATION) + ((2*rank*(const.SELECTION_PRESSURE-1))/(const.SIZE_POPULATION*(const.SIZE_POPULATION-1)))
@@ -173,7 +179,6 @@ class Generation:
     """"
     Reproduction
     """   
-    
     def createFamily(self):
         if len(self.get_list_of_winner()) != const.NUMBER_SOLUTION_REPLACE:
             raise Exception("Les {} gagnant n'ont pas encore été trouvés".format(const.NUMBER_SOLUTION_REPLACE))
@@ -194,7 +199,6 @@ class Generation:
     """
     Replacement
     """
-    
     def replacement(self):
         if const.REPLACEMENT_STRATEGIE == "Steady_State":
             self.steady_state_replacement()
@@ -219,6 +223,8 @@ class Generation:
                 self.get_solution_list().sort(key=lambda x: x.get_distance(), reverse=False)
                 num = random.randint(const.ELITISM, const.SIZE_POPULATION - 1)
                 self.get_solution_list()[num] = best_children
+        
+        random.shuffle(self.get_solution_list())
                    
     def generationnal_replacement(self):
         list_children = []
@@ -233,3 +239,5 @@ class Generation:
             list_children.append(children2)
         for i in range(const.NUMBER_SOLUTION_REPLACE):
             self.get_solution_list()[list_number[i]] = list_children[i]
+        
+        random.shuffle(self.get_solution_list())

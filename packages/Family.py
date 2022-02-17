@@ -74,8 +74,6 @@ class Family:
         else:
             raise Exception("Aucun problème n'a été défini")
 
-            
-        
     def reproduction(self):
         indice = const.INDICE_CROSSOVER
         

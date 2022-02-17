@@ -4,7 +4,7 @@ import copy
 import time
 
 import packages.constants as const
-from packages.Generation import Generation
+from packages.Generation import Generation 
 from packages.Solution import Solution
 
 #On prend le mei+lleur parent et le meilleur enfant
@@ -46,10 +46,12 @@ def build_random_population():
 MAIN
 """
 def start_genetique():
-    population = build_random_population()
-    list_generation = []
-    actual_generation = 1
     start_time = time.time()
+    
+    list_generation = []
+    actual_generation = 1  
+    
+    population = build_random_population()
     while actual_generation < const.NUMBER_MAX_GENERATION:
         generation = Generation(copy.deepcopy(population), actual_generation)
         list_generation.append(generation)
@@ -65,11 +67,12 @@ def start_genetique():
         population = generation.get_solution_list()
         
         if const.PROBLEM == "MAX_ONE" and generation.get_best_solution().get_distance() == const.SIZE_BINARY:
-            print("--- {0:.3f} seconds ---".format(time.time() - start_time))
-            print("Generation : {}".format(generation.get_generation_number()))
+            break
+        
+        if const.PROBLEM == "TSP" and generation.get_best_solution().get_distance() == 2085:
             break
                 
-    # print("best : {} mean : {}".format(generation.get_best_solution().get_distance(), generation.mean_distance()))
+    print("--- {0:.3f} seconds ---".format(time.time() - start_time))
 
 '''
 Verification crossover < size individu
