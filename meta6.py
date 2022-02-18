@@ -41,7 +41,7 @@ def build_random_population():
     while len(population) != const.SIZE_POPULATION:
         population.append(new_random_solution())
     return population
-    
+
 """
 MAIN
 """
@@ -73,6 +73,7 @@ def start_genetique():
             break
                 
     print("--- {0:.3f} seconds ---".format(time.time() - start_time))
+    print("Best solution : {}".format(generation.get_best_solution().get_individu_list()))
 
 '''
 Verification crossover < size individu

@@ -2,8 +2,11 @@
 Création d'un objet Génération permettant de stocker tous les individus
 d'une génération.
 """
+import multiprocessing
 from pickle import TRUE
 import random
+from threading import Thread
+import threading
 from typing import List
 
 import numpy as np
@@ -27,7 +30,7 @@ class Generation:
     
     def get_solution_list(self):
         return self.__solution_list
-
+    
     def get_generation_number(self):
         return self.__generation_number
     
@@ -61,8 +64,6 @@ class Generation:
             self.__best_solution = self.get_solution_list()[0]
         else:
             raise Exception("Aucun problème n'a été défini")
-        
-        random.shuffle(self.get_solution_list())
               
     def presentation_generation(self):
         for i in self.get_solution_list():
@@ -123,8 +124,6 @@ class Generation:
             
         self.__list_of_winner.append(picked_solution[0])
         self.del_selection_list()
-        
-        random.shuffle(self.get_solution_list())
     
     """
     Roulette
@@ -160,7 +159,6 @@ class Generation:
         
         while len(self.get_list_of_winner()) != const.NUMBER_SOLUTION_REPLACE:
             self.find_rank_based_winner()
-            
     
     def find_rank_based_winner(self):
         list_weight = []
@@ -170,8 +168,6 @@ class Generation:
             
         picked_solution = random.choices(self.get_solution_list(), list_weight)
         self.__list_of_winner.append(picked_solution[0])
-        
-        random.shuffle(self.get_solution_list())
 
     def proba_rank(self, rank):
         return ((2-const.SELECTION_PRESSURE)/const.SIZE_POPULATION) + ((2*rank*(const.SELECTION_PRESSURE-1))/(const.SIZE_POPULATION*(const.SIZE_POPULATION-1)))
@@ -223,9 +219,7 @@ class Generation:
                 self.get_solution_list().sort(key=lambda x: x.get_distance(), reverse=False)
                 num = random.randint(const.ELITISM, const.SIZE_POPULATION - 1)
                 self.get_solution_list()[num] = best_children
-        
-        random.shuffle(self.get_solution_list())
-                   
+                           
     def generationnal_replacement(self):
         list_children = []
         self.get_solution_list().sort(key=lambda x: x.get_distance(), reverse=False)
@@ -239,5 +233,3 @@ class Generation:
             list_children.append(children2)
         for i in range(const.NUMBER_SOLUTION_REPLACE):
             self.get_solution_list()[list_number[i]] = list_children[i]
-        
-        random.shuffle(self.get_solution_list())

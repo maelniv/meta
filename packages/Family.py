@@ -30,11 +30,21 @@ class Family:
     
     def set_children1(self, city_list):
         self.__children1.set_individu_list(city_list)
-        self.__children1.distance_calculation()
-    
+        if (self.get_parent1().get_individu_list() == city_list):
+            self.__children1.set_distance(self.get_parent1().get_distance())
+        elif (self.get_parent2().get_individu_list() == city_list):
+            self.__children1.set_distance(self.get_parent2().get_distance())
+        else:
+            self.__children1.distance_calculation()   
+     
     def set_children2(self, city_list):
         self.__children2.set_individu_list(city_list)
-        self.__children2.distance_calculation()
+        if (self.get_parent1().get_individu_list() == city_list):
+            self.__children2.set_distance(self.get_parent1().get_distance())
+        elif (self.get_parent2().get_individu_list() == city_list):
+            self.__children2.set_distance(self.get_parent2().get_distance())
+        else:
+            self.__children2.distance_calculation()
     
     def mutation(self, children):
         number_alea = random.randint(0,100)
