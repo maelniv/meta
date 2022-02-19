@@ -3,10 +3,15 @@ import pandas as pd
 '''
 DATA
 '''
-#DATA = pd.read_csv("data/p01.15.291.tsp",header=None,delim_whitespace=True)
-DATA = pd.read_csv("data/gr17.2085.tsp",header=None,delim_whitespace=True)
-#DATA = pd.read_csv("data/five.19.tsp",header=None,delim_whitespace=True)
-#DATA = pd.read_csv("data/br17.39.atsp",header=None,delim_whitespace=True)
+# DATANAME = "p01_15.291.tsp"
+# DATANAME = "gr17.2085.tsp"
+# DATANAME = "five.19.tsp"
+# DATANAME = "br17.39.atsp"
+DATANAME = "att48.33523.tsp"
+
+DATA = pd.read_csv("data/{}".format(DATANAME),header=None,delim_whitespace=True)
+TARGET = int(DATANAME.split(".")[1])
+
 NUMBER_INDIVIDU = len(DATA)
 
 '''
@@ -32,19 +37,18 @@ REPLACEMENT_STRATEGIE = "Steady_State"
 '''
 CONSTANT - GLOBAL
 '''
-SIZE_POPULATION = 300
-NUMBER_SOLUTION_REPLACE = 50
+SIZE_POPULATION = 80
+NUMBER_SOLUTION_REPLACE = 20
 NUMBER_FAMILY = int(NUMBER_SOLUTION_REPLACE / 2)
-NUMBER_MAX_GENERATION = 1000
-MUTATION = 50
+NUMBER_MAX_GENERATION = 100000
+MUTATION = 55
 ELITISM = 3
-INDICE_CROSSOVER = 10
-PROCESSEUR = 2
+INDICE_CROSSOVER = 22
 
 '''
 CONSTANT - TOURNAMENT
 '''
-NUMBER_FINALIST = 3
+NUMBER_FINALIST = 5
 
 '''
 CONSTANT - RANK_BASED
@@ -54,4 +58,4 @@ SELECTION_PRESSURE = 1
 '''
 CONSTANT - MAX_ONE
 '''
-SIZE_BINARY = 500
+SIZE_BINARY = 1000

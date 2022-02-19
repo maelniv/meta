@@ -3,9 +3,12 @@ import random
 import copy
 import time
 
+import matplotlib.pyplot as plt
+
 import packages.constants as const
 from packages.Generation import Generation 
 from packages.Solution import Solution
+from Plotable import Plotable
 
 #On prend le mei+lleur parent et le meilleur enfant
 #Ensuite on remplace dans la population de base les 50 nouveaux frérot en gardant les 3 meilleurs de l'ancienne génération (élitisme)
@@ -40,8 +43,8 @@ def build_random_population():
     population = []
     while len(population) != const.SIZE_POPULATION:
         population.append(new_random_solution())
-    return population
-
+    return population    
+    
 """
 MAIN
 """
@@ -52,6 +55,8 @@ def start_genetique():
     actual_generation = 1  
     
     population = build_random_population()
+    plot = Plotable()
+
     while actual_generation < const.NUMBER_MAX_GENERATION:
         generation = Generation(copy.deepcopy(population), actual_generation)
         list_generation.append(generation)
@@ -62,22 +67,36 @@ def start_genetique():
         generation.replacement()
         generation.set_best_solution()
         
+        plot.append_x_vals(actual_generation)
+        plot.append_y_vals(generation.get_best_solution().get_distance())
+        
         print("Generation : {0} | Best : {1} | Mean : {2:.2f}".format(generation.get_generation_number(), generation.get_best_solution().get_distance(), generation.mean_distance()))
+
         actual_generation += 1
         population = generation.get_solution_list()
         
         if const.PROBLEM == "MAX_ONE" and generation.get_best_solution().get_distance() == const.SIZE_BINARY:
             break
         
-        if const.PROBLEM == "TSP" and generation.get_best_solution().get_distance() == 2085:
+        if const.PROBLEM == "TSP" and generation.get_best_solution().get_distance() == const.TARGET:
             break
-                
-    print("--- {0:.3f} seconds ---".format(time.time() - start_time))
+    
+    duration = time.time() - start_time
+    print("--- {0:.3f} seconds ---".format(duration))
     print("Best solution : {}".format(generation.get_best_solution().get_individu_list()))
+    
+    ax1.plot(plot.get_x_vals(),plot.get_y_vals())
+    ax1.text(0.99,0.99,"{0:.3f} seconds".format(duration),
+        verticalalignment='top', horizontalalignment='right',
+        transform=ax1.transAxes,
+        color='blue', fontsize=15)
+    plt.show()
 
 '''
 Verification crossover < size individu
 '''    
     
 if __name__ == '__main__':
+    fig = plt.figure()
+    ax1 = fig.add_subplot(1,1,1)
     start_genetique()
