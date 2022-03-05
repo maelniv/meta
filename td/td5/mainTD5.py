@@ -1,4 +1,3 @@
-import td.constants as const
 ##### Import files #####
 import random
 import matplotlib.pyplot as plt

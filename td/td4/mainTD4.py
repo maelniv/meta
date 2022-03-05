@@ -1,11 +1,8 @@
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import itertools
 import random
 import copy
 
-import td.constants as const
+import constants as const
 
 print(const.DATA)
 taille_tabu = 3

@@ -5,7 +5,7 @@ import time
 
 import matplotlib.pyplot as plt
 
-import td.constants as const
+import constants as const
 from td.td6.packages.Generation import Generation
 from td.td6.packages.Solution import Solution
 from td.td6.Plotable import Plotable

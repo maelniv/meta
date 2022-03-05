@@ -7,7 +7,7 @@ import random
 import numpy as np
 
 from td.td6.packages.Family import Family
-import td.constants as const
+import constants as const
 
 
 class Generation:

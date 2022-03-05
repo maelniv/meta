@@ -4,7 +4,7 @@ Création d'un objet Solution pour stocker :
 - La distance totale du trajet
 """
 
-import td.constants as const
+import constants as const
 
 
 class Solution:

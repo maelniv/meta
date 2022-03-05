@@ -1,5 +1,5 @@
 import random
-import td.constants as const
+import constants as const
 
 from td.td6.packages.Solution import Solution
 
