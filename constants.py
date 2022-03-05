@@ -9,7 +9,7 @@ DATA
 DATANAME = "br17.39.atsp"
 # DATANAME = "att48.33523.tsp"
 
-DATA = pd.read_csv("data/{}".format(DATANAME),header=None,delim_whitespace=True)
+DATA = pd.read_csv("data/{}".format(DATANAME), header=None, delim_whitespace=True)
 TARGET = int(DATANAME.split(".")[1])
 
 NUMBER_INDIVIDU = len(DATA)
