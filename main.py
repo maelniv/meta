@@ -9,8 +9,8 @@ from td.td6.meta6 import start_genetique
 
 if __name__ == '__main__':
     # mainTD1()
-    start_genetique() #TD6
-    # mainTD2()
+    # start_genetique() #TD6
+    mainTD2()
     # mainTD3()
     # mainTD4()
     # mainTD5()
