@@ -4,7 +4,6 @@ import copy
 
 import constants as const
 
-print(const.DATA)
 taille_tabu = 3
 
 
